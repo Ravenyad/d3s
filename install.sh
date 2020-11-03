@@ -6,16 +6,6 @@ if [ "$#" -ne 2 ]; then
 fi
 
 conda_install_path=$1
-conda_env_name=$2
-
-source $conda_install_path/etc/profile.d/conda.sh
-echo "****************** Creating conda environment ${conda_env_name} python=3.7 ******************"
-conda create -y --name $conda_env_name
-
-echo ""
-echo ""
-echo "****************** Activating conda environment ${conda_env_name} ******************"
-conda activate $conda_env_name
 
 echo ""
 echo ""

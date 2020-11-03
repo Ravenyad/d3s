@@ -8,7 +8,7 @@ class EnvSettings:
 
         self.results_path = '{}/tracking_results/'.format(pytracking_path)
         self.network_path = '{}/networks/'.format(pytracking_path)
-        self.otb_path = ''
+        self.otb_path = '/content/drive/My Drive/DATASET/Image Sequences/OTB100'
         self.nfs_path = ''
         self.uav_path = ''
         self.tpl_path = ''
