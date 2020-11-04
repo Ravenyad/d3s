@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$#" -ne 2 ]; then
+if [ "$#" -ne 1 ]; then
     echo "ERROR! Illegal number of parameters. Usage: bash install.sh conda_install_path environment_name"
     exit 0
 fi
@@ -10,7 +10,7 @@ conda_install_path=$1
 echo ""
 echo ""
 echo "****************** Installing pytorch with cuda9 ******************"
-conda install -y pytorch torchvision cudatoolkit=9.0 -c pytorch 
+conda install -y pytorch torchvision -c pytorch 
 
 echo ""
 echo ""
