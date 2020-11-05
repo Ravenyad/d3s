@@ -1,16 +1,14 @@
 import matplotlib
 from pytracking.utils.config import ON_COLAB
 
-matplotlib.use('agg' if ON_COLAB else 'TkAgg')
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import cv2 as cv
 import time
 import os
 import numpy as np
-
-if ON_COLAB:
-    from google.colab.patches import cv2_imshow
+from google.colab.patches import cv2_imshow
 
 class BaseTracker:
     """Base class for all trackers."""
@@ -60,10 +58,10 @@ class BaseTracker:
         return tracked_bb, times
 
     def imshow(self, display_name, frame, **kwargs):
-        if ON_COLAB:
-            cv2_imshow(frame, **kwargs)
-        else:
-            cv.imshow(display_name, frame, **kwargs)
+        # if ON_COLAB:
+        cv2_imshow(frame, **kwargs)
+        # else:
+        #     cv.imshow(display_name, frame, **kwargs)
     
     def track_videofile(self, videofilepath, optional_box=None):
         """Run track with a video file input."""
@@ -76,9 +74,9 @@ class BaseTracker:
 
         cap = cv.VideoCapture(videofilepath)
         display_name = 'Display: ' + self.params.tracker_name
-        if not ON_COLAB:
-            cv.namedWindow(display_name, cv.WINDOW_NORMAL | cv.WINDOW_KEEPRATIO)
-            cv.resizeWindow(display_name, 960, 720)
+        # if not ON_COLAB:
+        #     cv.namedWindow(display_name, cv.WINDOW_NORMAL | cv.WINDOW_KEEPRATIO)
+        #     cv.resizeWindow(display_name, 960, 720)
         success, frame = cap.read()
         self.imshow(display_name, frame)
         if success is not True:
@@ -183,10 +181,10 @@ class BaseTracker:
         ui_control = UIControl()
         cap = cv.VideoCapture(0)
         display_name = 'Display: ' + self.params.tracker_name
-        if not ON_COLAB:
-            cv.namedWindow(display_name, cv.WINDOW_NORMAL | cv.WINDOW_KEEPRATIO)
-            cv.resizeWindow(display_name, 960, 720)
-            cv.setMouseCallback(display_name, ui_control.mouse_callback)
+        # if not ON_COLAB:
+        #     cv.namedWindow(display_name, cv.WINDOW_NORMAL | cv.WINDOW_KEEPRATIO)
+        #     cv.resizeWindow(display_name, 960, 720)
+        #     cv.setMouseCallback(display_name, ui_control.mouse_callback)
 
         if hasattr(self, 'initialize_features'):
             self.initialize_features()
@@ -233,8 +231,8 @@ class BaseTracker:
 
         # When everything done, release the capture
         cap.release()
-        if not ON_COLAB:
-            cv.destroyAllWindows()
+        # if not ON_COLAB:
+        #     cv.destroyAllWindows()
 
     def reset_tracker(self):
         pass
@@ -252,7 +250,7 @@ class BaseTracker:
         self.pause_mode = False
         self.fig, self.ax = plt.subplots(1)
         # self.fig.canvas.manager.window.move(800, 50)
-        self.fig.canvas.manager.window.wm_geometry("+%d+%d" % (100, 50))
+        # self.fig.canvas.manager.window.wm_geometry("+%d+%d" % (100, 50))
 
         self.fig.canvas.mpl_connect('key_press_event', self.press)
         plt.tight_layout()
