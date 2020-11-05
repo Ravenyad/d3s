@@ -10,7 +10,7 @@ conda_install_path=$1
 echo ""
 echo ""
 echo "****************** Installing pytorch with cuda9 ******************"
-conda install -y pytorch torchvision -c pytorch 
+conda install -y pytorch torchvision cudatoolkit=9.0 -c pytorch 
 
 echo ""
 echo ""
