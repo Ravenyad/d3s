@@ -12,7 +12,7 @@ class EnvSettings:
         self.nfs_path = ''
         self.uav_path = ''
         self.tpl_path = ''
-        self.vot_path = ''
+        self.vot_path = '/content/drive/MyDrive/DATASET/Image Sequences/VOT2019'
         self.got10k_path = ''
         self.lasot_path = ''
         self.trackingnet_path = ''

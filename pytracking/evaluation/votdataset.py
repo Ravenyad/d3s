@@ -31,7 +31,7 @@ class VOTDatasetClass(BaseDataset):
         ext = 'jpg'
         start_frame = 1
 
-        anno_path = '{}/{}/groundtruth.txt'.format(self.base_path, sequence_name)
+        anno_path = '{}/{}/annotation/groundtruth.txt'.format(self.base_path, sequence_name)
         try:
             ground_truth_rect = np.loadtxt(str(anno_path), dtype=np.float64)
         except:
@@ -39,7 +39,7 @@ class VOTDatasetClass(BaseDataset):
 
         end_frame = ground_truth_rect.shape[0]
 
-        frames = ['{base_path}/{sequence_path}/color/{frame:0{nz}}.{ext}'.format(base_path=self.base_path,
+        frames = ['{base_path}/{sequence_path}/img/{frame:0{nz}}.{ext}'.format(base_path=self.base_path,
                   sequence_path=sequence_path, frame=frame_num, nz=nz, ext=ext)
                   for frame_num in range(start_frame, end_frame+1)]
 
