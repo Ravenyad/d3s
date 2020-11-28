@@ -35,6 +35,8 @@ class Segm(BaseTracker):
         # Initialize some stuff
         self.frame_num = 1
 
+        self.frame_name = '%08d' % self.frame_num
+
         if not hasattr(self.params, 'device'):
             self.params.device = 'cuda' if self.params.use_gpu else 'cpu'
 
