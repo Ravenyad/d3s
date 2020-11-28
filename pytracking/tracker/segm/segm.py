@@ -21,11 +21,15 @@ from pytracking.mask_to_disk import save_mask
 
 
 class Segm(BaseTracker):
+    # inisialisasi fitur
     def initialize_features(self):
         if not getattr(self, 'features_initialized', False):
             self.params.features_filter.initialize()
         self.features_initialized = True
 
+    # inisialisasi tracker
+    # dipanggil setiap memulai proses tracking di sequence, video dan webcam (analisis tiap frame)
+    # state parameter = parameter dari groundtruth_rect
     def initialize(self, image, state, init_mask=None, *args, **kwargs):
 
         # Initialize some stuff
@@ -47,7 +51,8 @@ class Segm(BaseTracker):
         tic = time.time()
 
         self.rotated_bbox = True
-
+    
+    #VOT pakai yang ini
         if len(state) == 8:
             self.gt_poly = np.array(state)
             x_ = np.array(state[::2])
@@ -67,6 +72,7 @@ class Segm(BaseTracker):
             if init_mask is not None:
                 self.rotated_bbox = False
 
+    #OTB pakai yang ini
         elif len(state) == 4:
             state[0] -= 1
             state[1] -= 1
@@ -92,6 +98,7 @@ class Segm(BaseTracker):
         # Target size in base scale
         self.base_target_sz = self.target_sz / self.target_scale
 
+    #Belum tau ini ngapain, sepertinya ngebentuk search area
         # Use odd square search area and set sizes
         feat_max_stride = max(self.params.features_filter.stride())
         if getattr(self.params, 'search_area_shape', 'square') == 'square':
@@ -112,6 +119,7 @@ class Segm(BaseTracker):
         self.output_sz = self.params.score_upsample_factor * self.img_support_sz  # Interpolated size of the output
         self.kernel_size = self.fparams.attribute('kernel_size')
 
+    # Menentukan tingkat forget factor
         # Optimization options
         self.params.precond_learning_rate = self.fparams.attribute('learning_rate')
         if self.params.CG_forgetting_rate is None or max(self.params.precond_learning_rate) >= 1:
@@ -129,6 +137,7 @@ class Segm(BaseTracker):
             else:
                 self.output_window = dcf.hann2d(self.output_sz.long(), centered=False).to(self.params.device)
 
+    #Menentukan activation dan lainnya
         # Initialize some learning things
         self.init_learning()
 
@@ -531,6 +540,7 @@ class Segm(BaseTracker):
         else:
             raise ValueError('Unknown activation')
 
+    # Membuat sampling terhadap citra frame 0 + augmentation
     def generate_init_samples(self, im: torch.Tensor) -> TensorList:
         """Generate augmented initial samples."""
 
