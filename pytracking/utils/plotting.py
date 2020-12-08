@@ -1,7 +1,8 @@
 import matplotlib
 from pytracking.utils.config import ON_COLAB
 
-matplotlib.use('agg' if ON_COLAB else 'TkAgg')
+# matplotlib.use('agg' if ON_COLAB else 'TkAgg')
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import torch

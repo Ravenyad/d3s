@@ -54,7 +54,7 @@ class Segm(BaseTracker):
 
         self.rotated_bbox = True
     
-    #VOT pakai yang ini
+        #VOT pakai yang ini
         if len(state) == 8:
             self.gt_poly = np.array(state)
             x_ = np.array(state[::2])
@@ -74,7 +74,7 @@ class Segm(BaseTracker):
             if init_mask is not None:
                 self.rotated_bbox = False
 
-    #OTB pakai yang ini
+        #OTB pakai yang ini
         elif len(state) == 4:
             state[0] -= 1
             state[1] -= 1
@@ -100,7 +100,7 @@ class Segm(BaseTracker):
         # Target size in base scale
         self.base_target_sz = self.target_sz / self.target_scale
 
-    #Belum tau ini ngapain, sepertinya ngebentuk search area
+        #Belum tau ini ngapain, sepertinya ngebentuk search area
         # Use odd square search area and set sizes
         feat_max_stride = max(self.params.features_filter.stride())
         if getattr(self.params, 'search_area_shape', 'square') == 'square':
@@ -121,7 +121,7 @@ class Segm(BaseTracker):
         self.output_sz = self.params.score_upsample_factor * self.img_support_sz  # Interpolated size of the output
         self.kernel_size = self.fparams.attribute('kernel_size')
 
-    # Menentukan tingkat forget factor
+        # Menentukan tingkat forget factor
         # Optimization options
         self.params.precond_learning_rate = self.fparams.attribute('learning_rate')
         if self.params.CG_forgetting_rate is None or max(self.params.precond_learning_rate) >= 1:
@@ -139,7 +139,7 @@ class Segm(BaseTracker):
             else:
                 self.output_window = dcf.hann2d(self.output_sz.long(), centered=False).to(self.params.device)
 
-    #Menentukan activation dan lainnya
+        #Menentukan activation dan lainnya
         # Initialize some learning things
         self.init_learning()
 
@@ -291,6 +291,7 @@ class Segm(BaseTracker):
         sample_scales = self.target_scale * self.params.scale_factors
         test_x = self.extract_processed_sample(im, sample_pos, sample_scales, self.img_sample_sz)
 
+        #Fungsinya sebagai GEM
         # Compute scores
         scores_raw = self.apply_filter(test_x)
         translation_vec, scale_ind, s, flag = self.localize_target(scores_raw)
@@ -377,6 +378,7 @@ class Segm(BaseTracker):
     def apply_filter(self, sample_x: TensorList):
         return operation.conv2d(sample_x, self.filter, mode='same')
 
+    # Untuk tebak posisi / GEM
     def localize_target(self, scores_raw):
         # Weighted sum (if multiple features) with interpolation in fourier domain
         weight = self.fparams.attribute('translation_weight', 1.0)
@@ -829,6 +831,7 @@ class Segm(BaseTracker):
         init_patch_norm_ -= self.params.segm_normalize_mean
         init_patch_norm_ /= self.params.segm_normalize_std
 
+        # MUNGKIN BISA DIPAKAI BAHAN SKRIPSI????
         # create distance map for discriminative segmentation
         if self.params.segm_use_dist:
             if self.params.segm_dist_map_type == 'center':
@@ -950,6 +953,7 @@ class Segm(BaseTracker):
         # extract features (extracting twice on the same patch - not necessary)
         test_feat = self.segm_net.extract_backbone_features(patch_gpu)
 
+        # MUNGKIN BISA DIPAKAI BAHAN SKRIPSI????
         # prepare features in the list (format for the network)
         test_feat_segm = [feat for feat in test_feat.values()]
         train_masks = [self.init_mask_patch]
