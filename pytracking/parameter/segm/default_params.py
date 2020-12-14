@@ -8,7 +8,7 @@ def parameters():
 
     # These are usually set from outside
     params.debug = 1                        # Debug level
-    params.visualization = True            # Do visualization
+    params.visualization = False            # Do visualization
 
     # Use GPU or not (IoUNet requires this to be True)
     params.use_gpu = True

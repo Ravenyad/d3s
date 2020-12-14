@@ -44,6 +44,11 @@ pip install pycocotools
 
 echo ""
 echo ""
+echo "****************** Installing MTCNN Detector ******************"
+pip install mtcnn 
+
+echo ""
+echo ""
 echo "****************** Installing jpeg4py python wrapper ******************"
 pip install jpeg4py 
 

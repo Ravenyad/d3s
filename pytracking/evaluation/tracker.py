@@ -108,4 +108,18 @@ class Tracker:
 
         return params
 
+    def run_vidseq(self, videopath, debug=False):
+                
+        debug_ = debug
+        if debug is None:
+            debug_ = self.default_debug
 
+        self.parameters.debug = debug_
+
+        tracker = self.tracker_class(self.parameters)
+        
+        bboxes, execution_times = tracker.live_track(videopath)
+        
+        self.parameters.free_memory()
+
+        return bboxes, execution_times

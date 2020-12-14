@@ -57,3 +57,43 @@ def run_dataset(dataset, trackers, debug=False, threads=0):
         with multiprocessing.Pool(processes=threads) as pool:
             pool.starmap(run_sequence, param_list)
     print('Done')
+
+
+def run_stream(videopath, tracker:Tracker, debug=False, threads=0):
+    if threads == 0:
+        mode = 'sequential'
+    else:
+        mode = 'parallel'
+
+    base_results_path = '{}/{}'.format(tracker.results_dir, videopath)
+    results_path = '{}.txt'.format(base_results_path)
+    times_path = '{}_time.txt'.format(base_results_path)
+
+    if os.path.isfile(results_path) and not debug:
+        return
+
+    # Run detection and tracking online / nonstop
+    if mode == 'sequential':
+        print('Tracker: {} {} {} ,  Video Source: {}'.format(tracker.name, tracker.parameter_name, 
+        tracker.run_id, videopath))
+        
+        try:
+            bboxes, exec_times = tracker.run_vidseq(videopath, debug=debug)
+        except Exception as e :
+            print(e)
+            return
+
+    elif mode == 'parallel':
+        param_list = [(seq, tracker_info, debug) for seq, tracker_info in product(dataset, trackers)]
+        with multiprocessing.Pool(processes=threads) as pool:
+            pool.starmap(run_sequence, param_list)
+    
+    bboxes = np.array(bboxes).astype(float)
+    exec_times = np.array(exec_times).astype(float)
+
+    print('FPS: {}'.format(len(exec_times) / exec_times.sum()))
+    if not debug:
+        np.savetxt(results_path, bboxes, delimiter=',', fmt='%f')
+        np.savetxt(times_path, exec_times, delimiter='\t', fmt='%f')
+    
+    print('Done')

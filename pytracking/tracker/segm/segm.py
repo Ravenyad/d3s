@@ -312,6 +312,7 @@ class Segm(BaseTracker):
 
         if flag == 'not_found':
             uncert_score = 100
+            return None
 
         # Update position and scale
         # [AL] Modification

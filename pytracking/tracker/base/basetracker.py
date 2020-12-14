@@ -8,7 +8,9 @@ import cv2 as cv
 import time
 import os
 import numpy as np
+
 from google.colab.patches import cv2_imshow
+from mtcnn import MTCNN
 
 class BaseTracker:
     """Base class for all trackers."""
@@ -56,6 +58,63 @@ class BaseTracker:
                 self.visualize(image, state)
 
         return tracked_bb, times
+
+    def live_track(self, videopath):
+        
+        # Start live capture
+        cap = cv.VideoCapture(videopath)
+        sign, frame = cap.read()
+        frame_cp = frame.copy()
+
+        # init detector
+        detector = MTCNN()
+
+        if sign is not True :
+            print("Read frame from {} failed.".format(videopath))
+            exit(-1)
+        
+        track_bb = []
+        track_time = []
+        while sign :
+            # start detection
+            start_time = time.time()
+            bboxes = detector.detect_faces(frame_cp)
+            end_time = time.time() - start_time
+
+            if (bboxes == [] or bboxes is None):
+                print("no face detected..")
+                # read next frame
+                sign, frame = cap.read()
+                frame_cp = frame.copy()
+                cv.waitKey(1)
+                continue
+
+            # process if face detected
+            bbox = bboxes[0]['box']
+            track_time.append(end_time)
+            track_bb.append(bbox)
+
+            # initialize tracker
+            self.initialize(frame_cp, bbox)
+
+            sign, frame = cap.read()
+            frame_cp = frame.copy()
+
+            while ((bbox is not None) and sign) :
+                # Track object
+                start_time = time.time()
+                bbox = self.track(frame_cp)
+                track_time.append(time.time() - start_time)
+
+                track_bb.append(bbox)
+                
+                # read next frame
+                sign, frame = cap.read()
+                cv.waitKey(1)
+        
+        cap.release()
+
+        return track_bb, track_time
 
     def imshow(self, display_name, frame, **kwargs):
         # if ON_COLAB:
