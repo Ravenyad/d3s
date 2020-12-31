@@ -55,6 +55,11 @@ pip install keras-vggface
 
 echo ""
 echo ""
+echo "****************** Installing Tensorflow ******************"
+pip install tensorflow 
+
+echo ""
+echo ""
 echo "****************** Installing jpeg4py python wrapper ******************"
 pip install jpeg4py 
 

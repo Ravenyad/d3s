@@ -66,9 +66,9 @@ def run_tracker(tracker_name, tracker_param, run_id=None, dataset_name='otb', se
     trackers = [Tracker(tracker_name, tracker_param, run_id)]
 
     #Check dataset validity, comment if unnecessary
-    check_dataset(dataset)
+    # check_dataset(dataset)
 
-    # run_dataset(dataset, trackers, debug, threads)
+    run_dataset(dataset, trackers, debug, threads, no_anno=True)
 
 
 def main():
@@ -85,12 +85,15 @@ def main():
 
     run_tracker(args.tracker_name, args.tracker_param, args.runid, args.dataset, args.sequence, args.debug, args.threads)
 
-def check_dataset(dataset):
-    for seq in dataset:
-        print("=======")
-        print(seq.name)
-        print(len(seq.frames))
-        print("=======")
+# def check_dataset(dataset):
+#     for seq in dataset:
+#         print("=======")
+#         print(seq.name)
+#         print(seq.frames)
+#         if seq.name == "Piropo4A":
+#             for frame in seq.frames:
+#                 print(frame)
+#         print("=======")
 
 if __name__ == '__main__':
     main()
