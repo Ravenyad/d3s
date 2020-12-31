@@ -49,6 +49,11 @@ pip install mtcnn
 
 echo ""
 echo ""
+echo "****************** Installing VGGFace Face Recognizer ******************"
+pip install keras_vggface
+
+echo ""
+echo ""
 echo "****************** Installing jpeg4py python wrapper ******************"
 pip install jpeg4py 
 
