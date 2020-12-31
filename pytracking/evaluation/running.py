@@ -59,13 +59,13 @@ def run_dataset(dataset, trackers, debug=False, threads=0):
     print('Done')
 
 
-def run_stream(videopath, tracker:Tracker, debug=False, threads=0):
+def run_stream(path, tracker:Tracker, debug=False, threads=0):
     if threads == 0:
         mode = 'sequential'
     else:
         mode = 'parallel'
 
-    base_results_path = '{}/{}'.format(tracker.results_dir, videopath)
+    base_results_path = '{}/{}'.format(tracker.results_dir, path)
     results_path = '{}.txt'.format(base_results_path)
     times_path = '{}_time.txt'.format(base_results_path)
 
@@ -74,11 +74,11 @@ def run_stream(videopath, tracker:Tracker, debug=False, threads=0):
 
     # Run detection and tracking online / nonstop
     if mode == 'sequential':
-        print('Tracker: {} {} {} ,  Video Source: {}'.format(tracker.name, tracker.parameter_name, 
-        tracker.run_id, videopath))
+        print('Tracker: {} {} {} , Source: {}'.format(tracker.name, tracker.parameter_name, 
+        tracker.run_id, path))
         
         try:
-            bboxes, exec_times = tracker.run_vidseq(videopath, debug=debug)
+            bboxes, exec_times = tracker.run_vidseq(path, debug=debug)
         except Exception as e :
             print(e)
             return

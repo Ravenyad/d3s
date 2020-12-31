@@ -17,12 +17,16 @@ class BaseDataset:
 
 class Sequence:
     """Class for the sequence in an evaluation."""
-    def __init__(self, name, frames, ground_truth_rect, object_class=None):
+    def __init__(self, name, frames, ground_truth_rect=None, object_class=None, skip_frame=None):
         self.name = name
         self.frames = frames
         self.ground_truth_rect = ground_truth_rect
-        self.init_state = list(self.ground_truth_rect[0,:])
+        if self.ground_truth_rect is None:
+            self.init_state = None
+        else:
+            self.init_state = list(self.ground_truth_rect[0,:])
         self.object_class = object_class
+        self.skip_frame = skip_frame
 
 
 class SequenceList(list):
