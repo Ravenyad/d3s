@@ -15,6 +15,7 @@ from pytracking.evaluation.vot18dataset import VOT18Dataset
 from pytracking.evaluation.lasotdataset import LaSOTDataset
 from pytracking.evaluation.trackingnetdataset import TrackingNetDataset
 from pytracking.evaluation.got10kdataset import GOT10KDatasetTest, GOT10KDatasetVal, GOT10KDatasetLTRVal
+from pytracking.evaluation.skripsidataset import SkripsiDataset
 from pytracking.evaluation.running import run_dataset
 from pytracking.evaluation import Tracker
 
@@ -54,6 +55,8 @@ def run_tracker(tracker_name, tracker_param, run_id=None, dataset_name='otb', se
         dataset = GOT10KDatasetLTRVal()
     elif dataset_name == 'lasot':
         dataset = LaSOTDataset()
+    elif dataset_name == "skripsi":
+        dataset = SkripsiDataset()
     else:
         raise ValueError('Unknown dataset name')
 
@@ -62,7 +65,10 @@ def run_tracker(tracker_name, tracker_param, run_id=None, dataset_name='otb', se
 
     trackers = [Tracker(tracker_name, tracker_param, run_id)]
 
-    run_dataset(dataset, trackers, debug, threads)
+    #Check dataset validity, comment if unnecessary
+    check_dataset(dataset)
+
+    # run_dataset(dataset, trackers, debug, threads)
 
 
 def main():
@@ -79,6 +85,12 @@ def main():
 
     run_tracker(args.tracker_name, args.tracker_param, args.runid, args.dataset, args.sequence, args.debug, args.threads)
 
+def check_dataset(dataset):
+    for seq in dataset:
+        print("=======")
+        print(seq.name)
+        print(len(seq.frames))
+        print("=======")
 
 if __name__ == '__main__':
     main()

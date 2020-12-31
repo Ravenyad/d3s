@@ -100,6 +100,7 @@ class BaseTracker:
             sign, frame = cap.read()
             frame_cp = frame.copy()
 
+            # While the object is still detected
             while ((bbox is not None) and sign) :
                 # Track object
                 start_time = time.time()
