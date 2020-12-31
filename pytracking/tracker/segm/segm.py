@@ -310,9 +310,11 @@ class Segm(BaseTracker):
             if self.scores.size > self.params.response_budget_sz:
                 self.scores = np.delete(self.scores, 0)
 
+        if flag is not None:
+            return None
+
         if flag == 'not_found':
             uncert_score = 100
-            return None
 
         # Update position and scale
         # [AL] Modification

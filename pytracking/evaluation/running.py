@@ -6,6 +6,7 @@ from pytracking.evaluation import Sequence, Tracker
 from mtcnn import MTCNN
 from keras_vggface.vggface import VGGFace
 from keras_vggface import utils
+from pytracking.face_identify import FaceIdentify
 
 
 def run_sequence(seq: Sequence, tracker: Tracker, debug=False, face_detect=None):
@@ -19,7 +20,7 @@ def run_sequence(seq: Sequence, tracker: Tracker, debug=False, face_detect=None)
         return
 
     print('Tracker: {} {} {} ,  Sequence: {}'.format(tracker.name, tracker.parameter_name, tracker.run_id, seq.name))
-    return
+    
     if debug:
         tracked_bb, exec_times = tracker.run(seq, debug=debug, facerecog=face_detect)
     else:
@@ -38,7 +39,7 @@ def run_sequence(seq: Sequence, tracker: Tracker, debug=False, face_detect=None)
         np.savetxt(times_path, exec_times, delimiter='\t', fmt='%f')
 
 
-def run_dataset(dataset, trackers, debug=False, threads=0, no_anno=False):
+def run_dataset(dataset, trackers, debug=False, threads=0, no_anno=False, pickledir=None):
     """Runs a list of trackers on a dataset.
     args:
         dataset: List of Sequence instances, forming a dataset.
@@ -57,11 +58,12 @@ def run_dataset(dataset, trackers, debug=False, threads=0, no_anno=False):
             print("Entering self-detecting tracker...")
             print("Configuring face detector & recognizer...")
             face_detector = MTCNN()
-            # face_identify = VGGFace()
+            print("Load feature file...")
+            face_identify = FaceIdentify(precompute_features_file=pickledir+"precompute_features.pickle")
             face_recog = face_detector
             print("Configuration Done")
         else:
-            face_detector = None
+            face_recog = None
         
         for seq in dataset:
             for tracker_info in trackers:
@@ -112,35 +114,3 @@ def run_stream(path, tracker:Tracker, debug=False, threads=0):
         np.savetxt(times_path, exec_times, delimiter='\t', fmt='%f')
     
     print('Done')
-
-# def precompute_features():
-#     resnet50_features = VGGFace(model='resnet50', include_top=False, input_shape=(224, 224, 3),
-#                                 pooling='avg')  # pooling: None, avg or max
-#     def image2x(image_path):
-#         img = image.load_img(image_path, target_size=(224, 224))
-#         x = image.img_to_array(img)
-#         x = np.expand_dims(x, axis=0)
-#         x = utils.preprocess_input(x, version=1)  # or version=2
-#         return x
-
-#     def cal_mean_feature(image_folder):
-#         face_images = list(glob.iglob(os.path.join(image_folder, '*.*')))
-
-#         def chunks(l, n):
-#             """Yield successive n-sized chunks from l."""
-#             for i in range(0, len(l), n):
-#                 yield l[i:i + n]
-
-#         batch_size = 32
-#         face_images_chunks = chunks(face_images, batch_size)
-#         fvecs = None
-#         for face_images_chunk in face_images_chunks:
-#             images = np.concatenate([image2x(face_image) for face_image in face_images_chunk])
-#             batch_fvecs = resnet50_features.predict(images)
-#             if fvecs is None:
-#                 fvecs = batch_fvecs
-#             else:
-#                 fvecs = np.append(fvecs, batch_fvecs, axis=0)
-#         return np.array(fvecs).sum(axis=0) / len(fvecs)
-    
-#     return

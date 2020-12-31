@@ -20,7 +20,7 @@ from pytracking.evaluation.running import run_dataset
 from pytracking.evaluation import Tracker
 
 
-def run_tracker(tracker_name, tracker_param, run_id=None, dataset_name='otb', sequence=None, debug=0, threads=0):
+def run_tracker(tracker_name, tracker_param, run_id=None, dataset_name='otb', sequence=None, debug=0, threads=0, pickledir=None):
     """Run tracker on sequence or dataset.
     args:
         tracker_name: Name of tracking method.
@@ -68,7 +68,7 @@ def run_tracker(tracker_name, tracker_param, run_id=None, dataset_name='otb', se
     #Check dataset validity, comment if unnecessary
     # check_dataset(dataset)
 
-    run_dataset(dataset, trackers, debug, threads, no_anno=True)
+    run_dataset(dataset, trackers, debug, threads, no_anno=True, pickledir=pickledir)
 
 
 def main():
@@ -80,10 +80,11 @@ def main():
     parser.add_argument('--sequence', type=str, default=None, help='Sequence number or name.')
     parser.add_argument('--debug', type=int, default=0, help='Debug level.')
     parser.add_argument('--threads', type=int, default=0, help='Number of threads.')
+    parser.add_argument('--pickledir', type=str, default=None, help='location of pickle features (directory only).')
 
     args = parser.parse_args()
 
-    run_tracker(args.tracker_name, args.tracker_param, args.runid, args.dataset, args.sequence, args.debug, args.threads)
+    run_tracker(args.tracker_name, args.tracker_param, args.runid, args.dataset, args.sequence, args.debug, args.threads, args.pickledir)
 
 # def check_dataset(dataset):
 #     for seq in dataset:
