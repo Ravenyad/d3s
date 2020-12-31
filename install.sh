@@ -50,7 +50,8 @@ pip install mtcnn
 echo ""
 echo ""
 echo "****************** Installing VGGFace Face Recognizer ******************"
-pip install keras_vggface
+pip install Keras-Applications
+pip install keras-vggface
 
 echo ""
 echo ""
