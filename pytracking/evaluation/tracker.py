@@ -33,7 +33,7 @@ class Tracker:
         self.default_visualization = getattr(self.parameters, 'visualization', False)
         self.default_debug = getattr(self.parameters, 'debug', 0)
 
-    def run(self, seq, visualization=None, debug=None):
+    def run(self, seq, visualization=None, debug=None, facerecog=None):
         """Run tracker on sequence.
         args:
             seq: Sequence to run the tracker on.
@@ -55,7 +55,12 @@ class Tracker:
 
         tracker = self.tracker_class(self.parameters)
 
-        output_bb, execution_times = tracker.track_sequence(seq)
+        if facerecog is not None:
+            # DO FACETRACK HERE
+            print('face recognition will run now')
+            output_bb, execution_times = tracker.track_sequence_w_face_recog(seq, facerecog)
+        else:
+            output_bb, execution_times = tracker.track_sequence(seq)
 
         self.parameters.free_memory()
 

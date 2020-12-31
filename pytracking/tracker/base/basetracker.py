@@ -59,6 +59,48 @@ class BaseTracker:
 
         return tracked_bb, times
 
+    def track_sequence_w_face_recog(self, sequence, facerecog):
+        """Run tracker on a sequence."""
+
+        times = []
+        tracked_bb = []
+        self.sequence_name = sequence.name
+
+        if self.params.visualization:
+            self.init_visualization()
+        
+        face_found = False
+
+        for frame in sequence.frames:
+            image = self._read_image(frame)
+
+            start_time = time.time()
+
+            # Face detect
+            if not face_found:
+                faces = facerecog.detect_faces(image)
+                state = [0,0,0,0]
+                if faces:
+                    face_found = True
+                    state = faces[0]['box']
+                    self.initialize(image, state)
+            
+            # Face track
+            else :
+                state = self.track(image)
+
+                if state == None:
+                    state = [0,0,0,0]
+                    face_found = False
+
+                if self.params.visualization:
+                    self.visualize(image, state)
+            
+            times.append(time.time() - start_time)
+            tracked_bb.append(state)
+
+        return tracked_bb, times
+
     def live_track(self, videopath):
         
         # Start live capture
