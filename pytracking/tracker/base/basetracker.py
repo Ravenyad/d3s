@@ -112,6 +112,7 @@ class BaseTracker:
                 if self.params.visualization:
                     self.visualize(image, state)
             
+            state = [int(i) for i in state]
             state.append(face_id)
             
             times.append(time.time() - start_time)

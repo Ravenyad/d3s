@@ -90,7 +90,7 @@ class FaceIdentify(object):
         resized_img = np.array(resized_img)
         return resized_img, (x_a, y_a, x_b - x_a, y_b - y_a)
 
-    def identify_face(self, features, threshold=90):
+    def identify_face(self, features, threshold=99):
         distances = []
         for person in self.precompute_features_map:
             person_features = person.get("features")

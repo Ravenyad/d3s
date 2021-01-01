@@ -35,7 +35,7 @@ class Segm(BaseTracker):
         # Initialize some stuff
         self.frame_num = 1
 
-        self.frame_name = '%08d' % self.frame_num
+        self.frame_name = '%05d' % self.frame_num
 
         if not hasattr(self.params, 'device'):
             self.params.device = 'cuda' if self.params.use_gpu else 'cpu'
@@ -276,7 +276,7 @@ class Segm(BaseTracker):
 
         self.frame_num += 1
 
-        self.frame_name = '%08d' % self.frame_num
+        self.frame_name = '%05d' % self.frame_num
 
         self.pos_prev = [copy.copy(self.pos[0].item()), copy.copy(self.pos[1].item())]
 

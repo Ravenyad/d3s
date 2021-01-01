@@ -57,5 +57,5 @@ def save_mask(mask, mask_real, segm_crop_sz, bb, img_w, img_h, masks_save_path, 
     mask_save_dir = os.path.join(masks_save_path, sequence_name)
     if not os.path.exists(mask_save_dir):
         os.mkdir(mask_save_dir)
-    mask_save_path = os.path.join(mask_save_dir, '{num:05d}.png'.format(num=frame_name))
+    mask_save_path = os.path.join(mask_save_dir, '%s.png' % frame_name)
     cv2.imwrite(mask_save_path, image_mask_norm)
