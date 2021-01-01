@@ -66,10 +66,13 @@ class BaseTracker:
         tracked_bb = []
         self.sequence_name = sequence.name
 
+        face_detect, face_recog = facerecog[0], facerecog[1]
+
         if self.params.visualization:
             self.init_visualization()
         
         face_found = False
+        face_id = None
 
         for frame in sequence.frames:
             image = self._read_image(frame)
@@ -78,11 +81,23 @@ class BaseTracker:
 
             # Face detect
             if not face_found:
-                faces = facerecog.detect_faces(image)
+                faces = face_detect.detect_faces(image)
                 state = [0,0,0,0]
                 if faces:
                     face_found = True
-                    state = faces[0]['box']
+
+                    #identify faces
+                    names = face_recog.face_identification(image,faces)
+
+                    face_id, state = names[0], faces[0]['box']
+
+                    # Enumerate all names, track the 1st unknown identity
+                    for i, name in enumerate(names):
+                        if name == "Unknown":
+                            face_id,state = names[i], faces[i]['box']
+                            break
+                    
+                    # Initialize tracking features
                     self.initialize(image, state)
             
             # Face track
@@ -92,9 +107,12 @@ class BaseTracker:
                 if state == None:
                     state = [0,0,0,0]
                     face_found = False
+                    face_id = None
 
                 if self.params.visualization:
                     self.visualize(image, state)
+            
+            state.append(face_id)
             
             times.append(time.time() - start_time)
             tracked_bb.append(state)

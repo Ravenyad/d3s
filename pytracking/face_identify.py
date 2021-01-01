@@ -103,6 +103,22 @@ class FaceIdentify(object):
         else:
             return "?"
 
+    def face_identification(self, img, faces, margin=10):
+
+        face_imgs = np.empty((len(faces), self.face_size, self.face_size, 3))
+
+        for i,face in enumerate(faces):
+            (x,y,w,h) = face['box']
+            cropped_face = img[y-margin:y+h+margin, x-margin:x+w+margin]
+            face_resized = cv2.resize(cropped_face, (self.face_size, self.face_size), interpolation=cv2.INTER_AREA)
+            face_resized_np = np.array(face_resized)
+            face_imgs[i, :, :, :] = face_resized_np
+
+        features_faces = self.model.predict(face_imgs)
+        predicted_names = [self.identify_face(features_face) for features_face in features_faces]
+
+        return predicted_names
+
     def detect_face(self):
         face_cascade = cv2.CascadeClassifier(self.CASE_PATH)
 
@@ -183,10 +199,10 @@ def precompute_features(face_path):
 
     precompute_features = []
 
-    face_path = face_path + "/"
+    face_path = face_path
 
     names = [d for d in os.listdir(face_path) if os.path.isdir(os.path.join(face_path, d))]
-    folders = [face_path + d for d in names]
+    folders = [os.path.join(face_path, d) for d in names]
     
     for i, folder in enumerate(folders):
         name = names[i]
@@ -194,7 +210,7 @@ def precompute_features(face_path):
         mean_features = cal_mean_feature(image_folder=folder)
         precompute_features.append({"name": name, "features": mean_features})
     
-    pickle_stuff(face_path + "precompute_features.pickle", precompute_features)
+    pickle_stuff(os.path.join(face_path,"precompute_features.pickle"), precompute_features)
     
 
 

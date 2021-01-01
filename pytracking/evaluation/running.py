@@ -59,8 +59,8 @@ def run_dataset(dataset, trackers, debug=False, threads=0, no_anno=False, pickle
             print("Configuring face detector & recognizer...")
             face_detector = MTCNN()
             print("Load feature file...")
-            face_identify = FaceIdentify(precompute_features_file=pickledir+"precompute_features.pickle")
-            face_recog = face_detector
+            face_identify = FaceIdentify(precompute_features_file=os.path.join(pickledir,"precompute_features.pickle"))
+            face_recog = [face_detector, face_identify]
             print("Configuration Done")
         else:
             face_recog = None
