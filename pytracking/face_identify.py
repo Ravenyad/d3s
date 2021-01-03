@@ -90,7 +90,7 @@ class FaceIdentify(object):
         resized_img = np.array(resized_img)
         return resized_img, (x_a, y_a, x_b - x_a, y_b - y_a)
 
-    def identify_face(self, features, threshold=99):
+    def identify_face(self, features, threshold=87):
         distances = []
         for person in self.precompute_features_map:
             person_features = person.get("features")
@@ -101,7 +101,7 @@ class FaceIdentify(object):
         if min_distance_value < threshold:
             return self.precompute_features_map[min_distance_index].get("name")
         else:
-            return "?"
+            return "Unknown"
 
     def face_identification(self, img, faces, margin=10):
 
@@ -109,7 +109,19 @@ class FaceIdentify(object):
 
         for i,face in enumerate(faces):
             (x,y,w,h) = face['box']
-            cropped_face = img[y-margin:y+h+margin, x-margin:x+w+margin]
+
+            x_marg, y_marg, x_max, y_max = x-margin, y-margin, x+w+margin, y+h+margin
+
+            if(x_marg < 0):
+              x_marg = x
+            if(y_marg < 0):
+              y_marg = y
+            # if(y_max > img.shape[0]):
+            #     y_max = y+h
+            # if(x_max > img.shape[1]):
+            #     x_max = x+w
+
+            cropped_face = img[y_marg : y_max, x_marg : x_max]
             face_resized = cv2.resize(cropped_face, (self.face_size, self.face_size), interpolation=cv2.INTER_AREA)
             face_resized_np = np.array(face_resized)
             face_imgs[i, :, :, :] = face_resized_np

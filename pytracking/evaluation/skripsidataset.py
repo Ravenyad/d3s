@@ -76,9 +76,11 @@ class SkripsiDatasetClass(BaseDataset):
             {"name":"Selftake_2", "path":"Selftake_2","startFrame":0, "endFrame":399, "nz":5, "ext":"jpg"},
             {"name":"Piropo2B", "path":"Piropo2B","startFrame":0, "endFrame":837, "nz":5, "ext":"jpg", "skip_frame":[90, 478, 563, 571, 608, 645, 663, 733, 829]},
             {"name":"Piropo4A", "path":"Piropo4A","startFrame":1, "endFrame":653, "nz":5, "ext":"jpg", "initOmit":490},
-            {"name":"ChokeP1ES2", "path":"ChokeP1E_S2","startFrame":0, "endFrame":2295, "nz":5, "ext":"jpg", "initOmit":100},
-            {"name":"ChokeP2LS5", "path":"ChokeP2L_S5","startFrame":0, "endFrame":754, "nz":5, "ext":"jpg", "initOmit":100}
+            {"name":"ChokeP1ES2", "path":"ChokeP1E_S2","startFrame":0, "endFrame":2295, "nz":5, "ext":"jpg", "initOmit":100}
         ]
+
+        # Masukin nanti
+        # {"name":"ChokeP2LS5", "path":"ChokeP2L_S5","startFrame":0, "endFrame":754, "nz":5, "ext":"jpg", "initOmit":100}
 
         #Format : {"name": "Woman", "path": "Woman/img", "startFrame": 1, "endFrame": 597, "nz": 4, "ext": "jpg", "anno_path": "Woman/groundtruth_rect.txt"}
         return sequence_info_list
