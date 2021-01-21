@@ -74,6 +74,7 @@ class SkripsiDatasetClass(BaseDataset):
         sequence_info_list = [
             {"name":"Selftake_1", "path":"Selftake_1","startFrame":0, "endFrame":399, "nz":5, "ext":"jpg"},
             {"name":"Selftake_2", "path":"Selftake_2","startFrame":0, "endFrame":399, "nz":5, "ext":"jpg"},
+            {"name":"Selftake_3", "path":"Selftake_3","startFrame":0, "endFrame":599, "nz":5, "ext":"jpg"},
             {"name":"Piropo2B", "path":"Piropo2B","startFrame":0, "endFrame":837, "nz":5, "ext":"jpg", "skip_frame":[90, 478, 563, 571, 608, 645, 663, 733, 829]},
             {"name":"Piropo4A", "path":"Piropo4A","startFrame":1, "endFrame":653, "nz":5, "ext":"jpg", "initOmit":490},
             {"name":"ChokeP1ES2", "path":"ChokeP1E_S2","startFrame":0, "endFrame":2295, "nz":5, "ext":"jpg", "initOmit":100}
